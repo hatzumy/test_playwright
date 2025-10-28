@@ -23,11 +23,13 @@ jobs:
         run: npx playwright install --with-deps
       - name: Run Playwright tests
         run: npx playwright test --grep-invert "tests\register.spec.ts"
-      - name: login test execution on ${{ matrix.browser }}
-        run: npx playwright test --grep-invert "tests\register.spec.ts" --project=${{ matrix.browser }}
-      - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
+      - name: login test execution on ${{ matrix.browsers }}
+        run: npx playwright test --grep-invert "tests\register.spec.ts" --project=${{ matrix.browsers }}
+      - name: Subir Reporte HTML como Artefacto
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.browsers }}
           path: playwright-report/
-          retention-days: 30
+          retention-days: 7
+
